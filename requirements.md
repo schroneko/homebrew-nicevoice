@@ -291,7 +291,7 @@ NiceVoice Application
 | nukosuku.com API     | OAuth ログイン、サブスク状態検証、デバイス管理 | 必須            | HTTPS (Bearer トークン)          |
 | Deepgram API         | クラウド音声認識（リアルタイム/バッチ）        | オプション      | WebSocket + REST                 |
 | Hugging Face Hub     | Voxtral/Qwen3 モデル取得                       | オプション      | `uvx` 経由でローカルサーバー起動 |
-| 1Password CLI (`op`) | 開発時の Deepgram API キー注入                 | 開発環境向け    | `Scripts/verify-build.sh` で参照 |
+| 1Password Environment | 開発用 OpenAI API キー注入                   | 開発環境向け    | `op run` で `Scripts/generate-test-audio.mjs` へ注入 |
 
 ### 5.4 ディレクトリ構造（目標）
 

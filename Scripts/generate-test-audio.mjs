@@ -1,23 +1,11 @@
 #!/usr/bin/env node
 
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = resolve(__dirname, '../benchmark-audio');
-
-const devVarsPath = resolve(__dirname, '../.dev.vars');
-if (existsSync(devVarsPath)) {
-  const content = readFileSync(devVarsPath, 'utf-8');
-  for (const line of content.split('\n')) {
-    const match = line.match(/^(\w+)=(.*)$/);
-    if (match) {
-      process.env[match[1]] = match[2];
-    }
-  }
-}
 
 const testCases = [
   { id: 'basic_greeting', text: 'こんにちは' },
@@ -36,13 +24,9 @@ function getApiKey() {
   if (process.env.OPENAI_API_KEY) {
     return process.env.OPENAI_API_KEY;
   }
-  try {
-    return execSync('op item get "OPENAI_API_KEY" --fields credential --reveal', {
-      encoding: 'utf-8',
-    }).trim();
-  } catch {
-    throw new Error('OPENAI_API_KEY が見つかりません。環境変数か 1Password を設定してください。');
-  }
+  throw new Error(
+    'OPENAI_API_KEY が見つかりません。op run --environment "$OP_ENVIRONMENT_ID" -- node Scripts/generate-test-audio.mjs で実行してください。',
+  );
 }
 
 const apiKey = getApiKey();
