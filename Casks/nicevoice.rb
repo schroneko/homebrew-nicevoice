@@ -9,10 +9,10 @@ cask "nicevoice" do
 
   app "NiceVoice.app"
 
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "/Applications/NiceVoice.app"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args: ["-dr", "com.apple.quarantine", "/Applications/NiceVoice.app"],
+        sudo: false
   end
 
   uninstall quit: "app.nicevoice.NiceVoice"
