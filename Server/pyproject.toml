@@ -7,7 +7,7 @@ name = "voxmlx"
 version = "0.0.2"
 description = "Voxtral Mini Realtime speech-to-text in MLX"
 license = {text = "MIT"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "mlx>=0.20.0",
     "numpy",
@@ -23,6 +23,9 @@ server = ["fastapi", "uvicorn[standard]"]
 
 [tool.setuptools.packages.find]
 include = ["voxmlx"]
+
+[tool.uv]
+constraint-dependencies = ["pillow>=13.0.0"]
 
 [dependency-groups]
 dev = [
