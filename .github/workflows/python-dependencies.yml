@@ -43,3 +43,15 @@ jobs:
             uv run --frozen python -c 'import qwen3asr.server'
           fi
         working-directory: ${{ matrix.project }}
+      - name: Verify wheel dependency metadata and Pillow upgrade
+        if: matrix.project == 'Server'
+        working-directory: Server
+        run: |
+          uv build --wheel --no-create-gitignore
+          uv run --frozen python -c 'from pathlib import Path; from zipfile import ZipFile; from email.parser import BytesParser; wheel = next(Path("dist").glob("voxmlx-*.whl")); archive = ZipFile(wheel); metadata = BytesParser().parsebytes(archive.read(next(name for name in archive.namelist() if name.endswith(".dist-info/METADATA")))); assert "pillow>=13.0.0" in metadata.get_all("Requires-Dist", [])'
+          uv venv --python 3.13 .venv-wheel
+          uv pip install --python .venv-wheel/bin/python pillow==12.3.0
+          uv pip install --python .venv-wheel/bin/python dist/voxmlx-*.whl
+          uv pip check --python .venv-wheel/bin/python
+          uvx --python 3.13 pip-audit --strict --progress-spinner off --path .venv-wheel/lib/python3.13/site-packages
+          uv run --no-project --python .venv-wheel/bin/python python -I -c 'import io; from importlib.metadata import version; from packaging.version import Version; from PIL import Image; import voxmlx.server; assert Version(version("pillow")) >= Version("13.0.0"); output = io.BytesIO(); Image.new("RGB", (2, 2), "red").save(output, format="PNG"); output.seek(0); assert Image.open(output).getpixel((0, 0)) == (255, 0, 0)'

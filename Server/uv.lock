@@ -7,9 +7,6 @@ resolution-markers = [
     "python_full_version < '3.13'",
 ]
 
-[manifest]
-constraints = [{ name = "pillow", specifier = ">=13.0.0" }]
-
 [[package]]
 name = "annotated-doc"
 version = "0.0.4"
@@ -1618,6 +1615,7 @@ dependencies = [
     { name = "mlx" },
     { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
     { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "pillow" },
     { name = "sentencepiece" },
     { name = "sounddevice" },
     { name = "soundfile" },
@@ -1645,6 +1643,7 @@ requires-dist = [
     { name = "mistral-common", specifier = ">=1.8.7" },
     { name = "mlx", specifier = ">=0.20.0" },
     { name = "numpy" },
+    { name = "pillow", specifier = ">=13.0.0" },
     { name = "sentencepiece" },
     { name = "sounddevice" },
     { name = "soundfile" },
