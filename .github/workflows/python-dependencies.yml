@@ -1,0 +1,45 @@
+name: Python dependencies
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: macos-26
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        project: [Server, Server/qwen3asr]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.13'
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
+        with:
+          enable-cache: false
+      - run: uv lock --check
+        working-directory: ${{ matrix.project }}
+      - run: uv sync --frozen
+        working-directory: ${{ matrix.project }}
+      - run: uv pip check
+        working-directory: ${{ matrix.project }}
+      - run: uv audit
+        working-directory: ${{ matrix.project }}
+      - name: Import server
+        env:
+          PROJECT: ${{ matrix.project }}
+        run: |
+          if [ "$PROJECT" = Server ]; then
+            uv run --frozen python -c 'import voxmlx.server; from PIL import Image; import io; output = io.BytesIO(); Image.new("RGB", (2, 2), "red").save(output, format="PNG"); output.seek(0); assert Image.open(output).getpixel((0, 0)) == (255, 0, 0)'
+          else
+            uv run --frozen python -c 'import qwen3asr.server'
+          fi
+        working-directory: ${{ matrix.project }}
