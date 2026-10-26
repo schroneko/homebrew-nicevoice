@@ -75,7 +75,7 @@ final class SpeechAnalyzerService {
             let transcriber = SpeechTranscriber(
                 locale: language.locale,
                 transcriptionOptions: [],
-                reportingOptions: [.volatileResults],
+                reportingOptions: [.volatileResults, .fastResults],
                 attributeOptions: []
             )
             transcribers.append(transcriber)
@@ -220,7 +220,7 @@ final class SpeechAnalyzerService {
         transcriber = SpeechTranscriber(
             locale: language.locale,
             transcriptionOptions: [],
-            reportingOptions: [.volatileResults],
+            reportingOptions: [.volatileResults, .fastResults],
             attributeOptions: []
         )
         guard let transcriber else {
