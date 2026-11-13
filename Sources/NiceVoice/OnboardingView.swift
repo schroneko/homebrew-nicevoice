@@ -604,7 +604,7 @@ struct OnboardingView: View {
             let transcriber = SpeechTranscriber(
                 locale: language.locale,
                 transcriptionOptions: [],
-                reportingOptions: [.volatileResults],
+                reportingOptions: [.volatileResults, .fastResults],
                 attributeOptions: []
             )
             transcribers.append(transcriber)
